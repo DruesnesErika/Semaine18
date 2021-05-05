@@ -22,9 +22,10 @@ CREATE TRIGGER after_products_update
 AFTER UPDATE ON products
 FOR EACH ROW
 BEGIN
-IF products.pro_stock < products.pro_stock_alert
+IF NEW.pro_stock < NEW.pro_stock_alert
 THEN 
-SET 
-
-
-END
+INSERT INTO commander_articles(codart, qte, datedecommande)
+VALUES (NEW.pro_id, NEW.pro_stock_alert - NEW.pro_stock, NOW());
+END IF ;
+END |
+DELIMITER ;
